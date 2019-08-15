@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+from urllib.request import Request, urlopen
+from os import environ
+import json
+
+ENDPOINT = "http://localhost:5000" \
+    if 'ENDPOINT' not in environ else environ['ENDPOINT']
+
+def get_largest(files):
+    body = json.dumps(files).encode('utf-8')
+    request = Request("{}/largest".format(ENDPOINT))
+    request.add_header('Content-Type', 'application/json')
+    request.add_header('Content-Length', len(body))
+    return urlopen(request, body).read().decode()
+
+if __name__ == '__main__':
+    import sys
+    print(get_largest(sys.argv[1:]))
